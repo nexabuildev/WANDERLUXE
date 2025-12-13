@@ -13,13 +13,13 @@ const verifyToken = (req, res, next) => {
 
     try {
         // Verificar si el token es real
-        const verified = jwt.verify(token, process.env.JWT_SECRET || 'secret');
-        
+        const verified = jwt.verify(token, process.env.JWT_SECRET);
+
         // Guardamos los datos del usuario en la petición
         req.user = verified;
-        
+
         console.log(`🔓 Acceso concedido a usuario ID: ${verified.id}`);
-        
+
         // Dejar pasar al controlador
         next();
     } catch (error) {

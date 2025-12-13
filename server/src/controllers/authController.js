@@ -2,6 +2,11 @@ const db = require('../../db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+// Validación de seguridad: JWT_SECRET es obligatorio
+if (!process.env.JWT_SECRET) {
+    throw new Error('🔴 FATAL: La variable de entorno JWT_SECRET no está definida. El servidor no puede arrancar de forma segura.');
+}
+
 // --- REGISTRO ---
 const register = async (req, res) => {
     const { fullName, email, password } = req.body;
@@ -23,7 +28,7 @@ const register = async (req, res) => {
 
         const token = jwt.sign(
             { id: newUser.rows[0].id, role: newUser.rows[0].role }, 
-            process.env.JWT_SECRET || 'secret_key',
+            process.env.JWT_SECRET,
             { expiresIn: '1d' }
         );
 
@@ -72,7 +77,7 @@ const login = async (req, res) => {
 
         const token = jwt.sign(
             { id: user.id, role: user.role }, 
-            process.env.JWT_SECRET || 'secret_key',
+            process.env.JWT_SECRET,
             { expiresIn: '1d' }
         );
 
