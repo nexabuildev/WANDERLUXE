@@ -8,10 +8,13 @@ const isProduction = process.env.NODE_ENV === 'production';
 // En local, seguimos usando las variables sueltas.
 const connectionString = process.env.DATABASE_URL || `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
 
+// Si es una URL interna de Render (empieza por dpg- y no tiene .com), no acepta SSL.
+const isRenderInternal = connectionString && connectionString.includes('dpg-') && !connectionString.includes('.com');
+
 const pool = new Pool({
     connectionString: connectionString,
-    // Importante: Las bases de datos en la nube exigen SSL (seguridad), en local no.
-    ssl: isProduction ? { rejectUnauthorized: false } : false
+    // Las URL internas de Render cortan la conexión si intentas forzar SSL.
+    ssl: (isProduction && !isRenderInternal) ? { rejectUnauthorized: false } : false
 });
 
 pool.on('connect', () => {

@@ -15,6 +15,9 @@ const priceRoutes = require('./src/routes/priceRoutes'); // <--- NUEVO: Rutas de
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// CONFIGURACIÓN DE PROXY (Necesario para Render y express-rate-limit)
+app.set('trust proxy', 1);
+
 // CONFIGURACIÓN CORS (La que ya tenías)
 app.use(cors({
     origin: true,
@@ -22,7 +25,7 @@ app.use(cors({
 }));
 
 // --- CAMBIO AQUÍ: AUMENTAMOS EL LÍMITE A 50MB ---
-app.use(express.json({ limit: '50mb' })); 
+app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 // -----------------------------------------------
 
@@ -40,9 +43,9 @@ app.use('/api/price', priceRoutes); // <--- NUEVO: Activamos la ruta de precios
 app.get('/', async (req, res) => {
     try {
         const result = await db.query('SELECT NOW()');
-        res.json({ 
-            message: '🥂 Backend WanderLuxe Operativo en la Nube', 
-            time: result.rows[0].now 
+        res.json({
+            message: '🥂 Backend WanderLuxe Operativo en la Nube',
+            time: result.rows[0].now
         });
     } catch (err) {
         console.error("Error en BD:", err);
