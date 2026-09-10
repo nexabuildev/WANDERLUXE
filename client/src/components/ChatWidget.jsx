@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { API_URL } from '../config/api';
 
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,8 +12,7 @@ const ChatWidget = () => {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        // --- CAMBIO: RUTA RELATIVA ---
-        const response = await fetch('/api/chat/history', {
+        const response = await fetch(`${API_URL}/api/chat/history`, {
           credentials: 'include' // Obligatorio: Envía la cookie de sesión
         });
 
@@ -51,8 +51,7 @@ const ChatWidget = () => {
     setLoading(true);
 
     try {
-      // --- CAMBIO: RUTA RELATIVA ---
-      const response = await fetch('/api/chat/send', {
+      const response = await fetch(`${API_URL}/api/chat/send`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userMsg.text }), 

@@ -27,16 +27,19 @@ const register = async (req, res) => {
         );
 
         const token = jwt.sign(
-            { id: newUser.rows[0].id, role: newUser.rows[0].role }, 
+            { id: newUser.rows[0].id, role: newUser.rows[0].role },
             process.env.JWT_SECRET,
             { expiresIn: '1d' }
         );
 
-        // CONFIGURACIÓN DE COOKIE (Actualizada)
+        // CONFIGURACIÓN DE COOKIE
+        // En producción, frontend (Cloudflare Pages) y backend (Render) están en dominios
+        // distintos, así que la cookie necesita sameSite:'none' + secure:true para viajar.
+        const isProd = process.env.NODE_ENV === 'production';
         res.cookie('token', token, {
             httpOnly: true,
-            secure: false, // false para localhost
-            sameSite: 'lax',
+            secure: isProd,
+            sameSite: isProd ? 'none' : 'lax',
             path: '/', // <--- IMPORTANTE: Disponible en toda la web
             maxAge: 24 * 60 * 60 * 1000
         });
@@ -76,16 +79,17 @@ const login = async (req, res) => {
         }
 
         const token = jwt.sign(
-            { id: user.id, role: user.role }, 
+            { id: user.id, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: '1d' }
         );
 
-        // CONFIGURACIÓN DE COOKIE (Actualizada)
+        // CONFIGURACIÓN DE COOKIE
+        const isProd = process.env.NODE_ENV === 'production';
         res.cookie('token', token, {
             httpOnly: true,
-            secure: false,
-            sameSite: 'lax',
+            secure: isProd,
+            sameSite: isProd ? 'none' : 'lax',
             path: '/', // <--- IMPORTANTE
             maxAge: 24 * 60 * 60 * 1000
         });

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../config/api';
 
 const CreateTrip = () => {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const CreateTrip = () => {
       try {
         // Llamamos a la nueva ruta del backend para calcular el precio
         // Usamos template literals para enviar los parámetros en la URL
-        const response = await fetch(`/api/price?days=${days}&budget=${budget}&travelers=${travelers}`);
+        const response = await fetch(`${API_URL}/api/price?days=${days}&budget=${budget}&travelers=${travelers}`);
         const data = await response.json();
         
         if (response.ok) {
@@ -64,7 +65,7 @@ const CreateTrip = () => {
 
     try {
       // 1. Generar el Viaje (Backend)
-      const response = await fetch('/api/trips/generate', {
+      const response = await fetch(`${API_URL}/api/trips/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),

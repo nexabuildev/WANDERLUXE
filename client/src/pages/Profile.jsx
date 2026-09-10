@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { API_URL } from '../config/api';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const Profile = () => {
     // Cargar perfil fresco del servidor para asegurar que vemos la foto actual
     const fetchProfile = async () => {
       try {
-        const res = await fetch('/api/users/profile');
+        const res = await fetch(`${API_URL}/api/users/profile`, { credentials: 'include' });
         if (res.ok) {
           const data = await res.json();
           setUser(data);
@@ -32,7 +33,7 @@ const Profile = () => {
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/users/logout', { method: 'POST' });
+      await fetch(`${API_URL}/api/users/logout`, { method: 'POST', credentials: 'include' });
     } catch (e) {
       console.error("Error logout backend", e);
     }
@@ -77,10 +78,11 @@ const Profile = () => {
     }
 
     try {
-      const response = await fetch('/api/users/profile', {
+      const response = await fetch(`${API_URL}/api/users/profile`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...user, password: passwords.new })
+        body: JSON.stringify({ ...user, password: passwords.new }),
+        credentials: 'include'
       });
 
       const data = await response.json();

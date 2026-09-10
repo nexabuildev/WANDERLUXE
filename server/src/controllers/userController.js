@@ -59,10 +59,13 @@ const updateProfile = async (req, res) => {
 
 // --- LOGOUT ---
 const logout = (req, res) => {
+    // Debe usar los mismos atributos con los que se creó la cookie (login/register)
+    // para que el navegador la reconozca y la borre correctamente.
+    const isProd = process.env.NODE_ENV === 'production';
     res.clearCookie('token', {
         httpOnly: true,
-        secure: true, // True para HTTPS en producción (Render/Vercel)
-        sameSite: 'lax',
+        secure: isProd,
+        sameSite: isProd ? 'none' : 'lax',
         path: '/'
     });
     res.json({ message: 'Sesión cerrada correctamente' });

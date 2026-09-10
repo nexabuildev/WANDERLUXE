@@ -18,9 +18,18 @@ const PORT = process.env.PORT || 3000;
 // CONFIGURACIÓN DE PROXY (Necesario para Render y express-rate-limit)
 app.set('trust proxy', 1);
 
-// CONFIGURACIÓN CORS (La que ya tenías)
+// CONFIGURACIÓN CORS
+// CLIENT_URL admite una o varias URLs separadas por coma (ej: dominio de Cloudflare Pages).
+// Si no se define (desarrollo local), se permite cualquier origen como antes.
+const allowedOrigins = (process.env.CLIENT_URL || '').split(',').map(o => o.trim()).filter(Boolean);
+
 app.use(cors({
-    origin: true,
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        callback(new Error('No permitido por CORS'));
+    },
     credentials: true
 }));
 

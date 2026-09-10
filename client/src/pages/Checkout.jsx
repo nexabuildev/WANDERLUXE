@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { API_URL } from '../config/api';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -39,8 +40,7 @@ const Checkout = () => {
     setProcessing(true);
 
     try {
-      // Usamos el proxy de Vite
-      const response = await fetch('/api/payments/pay', {
+      const response = await fetch(`${API_URL}/api/payments/pay`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

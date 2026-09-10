@@ -8,6 +8,7 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 // Animaciones
 import { Reveal } from '../components/Reveal'; // <--- IMPORTANTE: Animaciones al hacer scroll
+import { API_URL } from '../config/api';
 
 // Configuración del icono del mapa
 let DefaultIcon = L.icon({
@@ -27,7 +28,7 @@ const TripDetails = () => {
   useEffect(() => {
     const fetchTrip = async () => {
       try {
-        const response = await fetch(`/api/trips/${id}`, {
+        const response = await fetch(`${API_URL}/api/trips/${id}`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include' 

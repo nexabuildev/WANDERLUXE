@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { API_URL } from '../config/api';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -18,10 +19,7 @@ const Login = () => {
     setError('');
 
     try {
-      // --- CAMBIO CLAVE: RUTA RELATIVA ---
-      // Usamos '/api/...' en lugar de la dirección IP completa.
-      // El proxy de Vite se encargará de enviarlo al puerto 3000.
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),

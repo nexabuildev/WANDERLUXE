@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import ThemeToggle from './ThemeToggle';
+import { API_URL } from '../config/api';
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -24,7 +25,7 @@ const Navbar = () => {
 
     const handleLogout = async () => {
         try {
-            await fetch('/api/users/logout', { method: 'POST', credentials: 'include' });
+            await fetch(`${API_URL}/api/users/logout`, { method: 'POST', credentials: 'include' });
         } catch (e) {
             console.error("Error logout backend", e);
         }

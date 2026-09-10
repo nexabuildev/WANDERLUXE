@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { API_URL } from '../config/api';
 
 const MyTrips = () => {
   const [trips, setTrips] = useState([]);
@@ -12,10 +13,7 @@ const MyTrips = () => {
 
   const fetchTrips = async () => {
     try {
-      // --- CAMBIO CLAVE: RUTA RELATIVA ---
-      // Usamos '/api/...' para que el proxy de Vite maneje la conexión
-      // y evite problemas de CORS o cookies perdidas.
-      const response = await fetch('/api/trips/my-trips', {
+      const response = await fetch(`${API_URL}/api/trips/my-trips`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include' // Vital: Envía tu "carnet de identidad" (cookie)
